@@ -95,7 +95,8 @@ or
 
 ## TODO
 
-*   **Automatic HTTP to HTTPS Upgrade**: Implement logic to attempt connection via HTTPS if an HTTP connection to a Jellyfin instance fails or is redirected.
-*   **More Robust Error Handling**: Enhance error handling for API interactions and file operations.
-*   **Testing**: Add unit and integration tests.
-*   **Logging Levels**: Implement configurable logging levels (e.g., debug, info, error).
+*   [ ] **Automatic HTTP to HTTPS Upgrade**: Implement logic to attempt connection via HTTPS if an HTTP connection to a Jellyfin instance fails or is redirected.
+*   [ ] **More Robust Error Handling**: Enhance error handling for API interactions and file operations.
+*   [ ] **Testing**: Add unit and integration tests.
+*   [ ] **Logging Levels**: Implement configurable logging levels (e.g., debug, info, error).
+*   [ ] **Docker Support**: Add support for running the migration tool within a Docker container.
