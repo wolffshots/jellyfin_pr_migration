@@ -1,0 +1,24 @@
+# Path to the input TSV file that needs processing
+input_tsv_file_path = "path/to/your/input.tsv"
+
+# --- Output Options (at least one output must be configured) ---
+
+# Option 1: Output to TSV file (header-less)
+# If using SQLite output, this can be commented out or removed.
+output_tsv_file_path = "path/to/your/output.tsv"
+
+# Option 2: Output to SQLite database
+# If enabled, data will be inserted into the specified table.
+# The table (e.g., "PlaybackActivity") is assumed to already exist with columns
+# matching the TSV structure (DateCreated, UserId, ItemId, etc., all as TEXT).
+# Uncomment and set the path to your SQLite DB file to enable this.
+# sqlite_db_path = "path/to/your/database.db"
+# sqlite_table_name = "PlaybackActivity" # Table to insert data into. Defaults to "PlaybackActivity" if not specified.
+
+[instance_old]
+base_url = "http://localhost:8096"
+api_token = "YOUR_OLD_JELLYFIN_API_TOKEN"
+
+[instance_new]
+base_url = "http://localhost:8097"
+api_token = "YOUR_NEW_JELLYFIN_API_TOKEN"
