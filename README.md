@@ -65,14 +65,31 @@ api_token = "YOUR_NEW_JELLYFIN_API_TOKEN"
 
 ## Usage
 
+### Prebuilt release
+
+Download the latest release from [GitHub Releases](https://github.com/wolffshots/jellyfin-pr-migration/releases).
+
+```bash
+./jellyfin_pr_migration
+```
+or
+```bash
+./jellyfin_pr_migration -c /path/to/your/custom_config.toml
+```
+
+### Building from source
+
 ```bash
 # Build the project
 cargo build
+```
 
-# Run with default config.toml in current directory
+Run it with
+```bash
 ./target/debug/jellyfin_pr_migration
-
-# Run with a specific config file
+```
+or
+```bash
 ./target/debug/jellyfin_pr_migration -c /path/to/your/custom_config.toml
 ```
 

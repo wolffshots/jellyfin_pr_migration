@@ -6,7 +6,7 @@ permissions:
 on:
   push:
     tags:
-      - 'v*'
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   build-release:
@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-artifact
-          path: target/release/
+          path: target/release/jellyfin_pr_migration*
 
   create-release:
     needs: build-release
