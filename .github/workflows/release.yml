@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-artifact
-          path: target/release/jellyfin_pr_migration*
+          path: target/release/jellyfin_pr_migration{,.exe}
 
   create-release:
     needs: build-release
