@@ -99,12 +99,6 @@ or
 
 A Docker image is available on GitHub Container Registry. This simplifies deployment and eliminates the need to install Rust or build the application locally.
 
-#### Pull the Docker image
-
-```bash
-docker pull ghcr.io/wolffshots/jellyfin-pr-migration:latest
-```
-
 #### Prepare your data directory
 
 Create a directory on your host machine to store your configuration and data files:
@@ -137,6 +131,16 @@ The image is amd64 so will require you to be able to run amd64 containers.
 
 ```bash
 docker run -it --rm -v /path/to/your/data:/data ghcr.io/wolffshots/jellyfin_pr_migration:latest
+```
+
+If you are on a non-amd64 arch then you may need to specify platform as well:
+```bash
+docker run -it --rm -v /path/to/your/data:/data --platform=linux/amd64 ghcr.io/wolffshots/jellyfin_pr_migration:latest
+```
+
+If you run into permission issues then you may need to chown the directory and try run it again:
+```bash
+sudo chown -R 144:153 /path/to/your/data
 ```
 
 The container will:
