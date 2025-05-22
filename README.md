@@ -133,8 +133,10 @@ api_token = "YOUR_NEW_JELLYFIN_API_TOKEN"
 
 #### Run the Docker container
 
+The image is amd64 so will require you to be able to run amd64 containers.
+
 ```bash
-docker run --rm -v /path/to/your/data:/data ghcr.io/wolffshots/jellyfin-pr-migration:latest
+docker run -it --rm -v /path/to/your/data:/data ghcr.io/wolffshots/jellyfin_pr_migration:latest
 ```
 
 The container will:

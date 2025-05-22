@@ -1,16 +1,16 @@
 use clap::Parser;
 use config::Config as AppConfig; // Renamed to avoid conflict with our Config struct
 use csv; // For TSV parsing/writing
+use indicatif::{ProgressBar, ProgressStyle};
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use reqwest::Client;
 use rusqlite::params;
 use rusqlite::Connection;
 use serde::Deserialize;
 use std::collections::HashMap;
-use indicatif::{ProgressBar, ProgressStyle};
-use std::io::{BufRead, BufReader};
 use std::error::Error;
 use std::fs;
+use std::io::{BufRead, BufReader};
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -258,7 +258,6 @@ async fn process_tsv_file(
         .expect("Progress bar style template is invalid")
         .progress_chars("#>-"));
     pb.set_message("Processing records...");
-
 
     if user_id_map.is_empty() {
         pb.println("User ID map is empty. No UserID replacements will be made, but data will be processed to configured outputs.");
