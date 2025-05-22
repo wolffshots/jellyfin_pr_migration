@@ -27,13 +27,37 @@ jobs:
       - name: Build
         run: cargo build --release
 
+      - name: Rename release asset
+        run: |
+          asset_path="target/release/jellyfin_pr_migration"
+          asset_name="jellyfin_pr_migration"
+          os_suffix=""
+
+          if [[ "${{ runner.os }}" == "macOS" ]]; then
+            os_suffix="-macos"
+            mv "${asset_path}" "${asset_path}${os_suffix}"
+          elif [[ "${{ runner.os }}" == "Linux" ]]; then
+            os_suffix="-linux"
+            mv "${asset_path}" "${asset_path}${os_suffix}"
+          elif [[ "${{ runner.os }}" == "Windows" ]]; then
+            os_suffix="-windows.exe" # Note the .exe
+            mv "${asset_path}.exe" "target/release/${asset_name}${os_suffix}"
+            asset_path="target/release/${asset_name}${os_suffix}" # Update asset_path for Windows
+          else
+            echo "Unsupported OS: ${{ runner.os }}"
+            exit 1
+          fi
+
+          echo "Renamed asset to: ${asset_path}${os_suffix}"
+          # Set an output variable for the new asset name/path if your upload action needs it
+        id: rename_step
+
       - name: Archive artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-artifact
           path: |
-            target/release/jellyfin_pr_migration
-            target/release/jellyfin_pr_migration.exe
+            target/release/jellyfin_pr_migration-*
 
   create-release:
     needs: build-release
