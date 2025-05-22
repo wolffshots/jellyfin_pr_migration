@@ -3,7 +3,7 @@ name: Publish Docker image
 on:
   push:
     tags:
-      - "v*[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 env:
   REGISTRY: ghcr.io
@@ -44,7 +44,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./jellyfin_tsv_updater
+          file: ./jellyfin_tsv_updater/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

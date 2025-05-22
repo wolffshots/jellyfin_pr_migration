@@ -7,6 +7,8 @@ This tool facilitates the migration of playback history (specifically from the J
 4. Replacing the old User IDs in the playback records with the new User IDs.
 5. Outputting the modified records, either to a new TSV file (header-less) and/or by inserting them directly into an SQLite database table (e.g., `playback_reporting.db` used by the PlaybackReporting plugin on the new instance).
 
+Running the tool multiple times will not cause any issues, as it will only update the records that have not been processed yet.
+
 Note: for best practice you should probably make a copy of the `playback_reporting.db` file and use that to actually work on. Once you are happy with the updated database locally you should shutdown the new Jellyfin instance and replace the original `playback_reporting.db` with the updated one.
 
 ## Features
@@ -117,7 +119,8 @@ Place your `config.toml`, `input.tsv`, and optionally your `playback_reporting.d
 # In your config.toml, use paths relative to /data
 input_tsv_file_path = "/data/input.tsv"
 output_tsv_file_path = "/data/output.tsv" # optional if sqlite_db_path is set - see config.example.toml or Configuration in README.md more context
-#sqlite_db_path = "/data/playback_reporting.db"
+# sqlite_db_path = "/data/playback_reporting.db"
+# sqlite_table_name = "PlaybackActivity" # Defaults to "PlaybackActivity" if not specified
 
 [instance_old]
 base_url = "http://localhost:8096"
@@ -137,7 +140,7 @@ docker run --rm -v /path/to/your/data:/data ghcr.io/wolffshots/jellyfin-pr-migra
 The container will:
 1. Mount your host directory to `/data` inside the container
 2. Use the `config.toml` from this directory
-3. Process your input files and create output files in the same directory
+3. Process your input files and create output files in the same directory or update the SQLite3 database with the relevant data
 4. Exit when processing is complete
 
 This allows you to run the migration tool without installing any dependencies on your host system.

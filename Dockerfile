@@ -1,5 +1,4 @@
-# Build stage
-FROM rust:1.73-slim-bullseye as builder
+FROM rust:1.87-slim-bookworm as builder
 
 WORKDIR /app
 
@@ -16,8 +15,7 @@ RUN mkdir -p src && \
 COPY . .
 RUN cargo build --release
 
-# Runtime stage
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -32,20 +30,20 @@ RUN groupadd -r jellyfin && useradd -r -g jellyfin jellyfin
 WORKDIR /app
 RUN mkdir -p /data && chown -R jellyfin:jellyfin /data
 
-# Copy only the built executable from the builder stage
+# Copy the built executable from the builder stage
 COPY --from=builder /app/target/release/jellyfin_pr_migration /app/jellyfin_pr_migration
 
 # Set the data directory as a volume
 VOLUME /data
 
-# Switch to non-root user
+# Change to the non-root user
 USER jellyfin
 
-# Documentation
+# Add metadata labels
 LABEL org.opencontainers.image.title="Jellyfin PlaybackReporting Migration Tool"
-LABEL org.opencontainers.image.description="A tool to migrate Jellyfin PlaybackReporting data between instances"
+LABEL org.opencontainers.image.description="Tool for migrating Jellyfin PlaybackReporting data between instances"
 LABEL org.opencontainers.image.source="https://github.com/wolffshots/jellyfin_pr_migration"
 
 # Run the migration tool
-# Users should mount their config.toml, input.tsv, and optionally the playback_reporting.db to /data
+# Users should mount their config.toml, input.tsv, and optionally playback_reporting.db to /data
 ENTRYPOINT ["/app/jellyfin_pr_migration", "-c", "/data/config.toml"]
