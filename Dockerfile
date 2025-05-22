@@ -5,6 +5,13 @@ WORKDIR /app
 # Copy only files needed for dependency resolution first
 COPY Cargo.toml Cargo.lock ./
 
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create a dummy main.rs to build dependencies
 RUN mkdir -p src && \
     echo "fn main() {}" > src/main.rs && \
@@ -20,6 +27,7 @@ FROM debian:bookworm-slim
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
+    pkg-config \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
