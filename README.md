@@ -93,10 +93,59 @@ or
 ./target/debug/jellyfin_pr_migration -c /path/to/your/custom_config.toml
 ```
 
+### Using Docker
+
+A Docker image is available on GitHub Container Registry. This simplifies deployment and eliminates the need to install Rust or build the application locally.
+
+#### Pull the Docker image
+
+```bash
+docker pull ghcr.io/wolffshots/jellyfin-pr-migration:latest
+```
+
+#### Prepare your data directory
+
+Create a directory on your host machine to store your configuration and data files:
+
+```bash
+mkdir -p /path/to/your/data
+```
+
+Place your `config.toml`, `input.tsv`, and optionally your `playback_reporting.db` in this directory. Make sure to update your `config.toml` with paths relative to the Docker container's `/data` directory:
+
+```toml
+# In your config.toml, use paths relative to /data
+input_tsv_file_path = "/data/input.tsv"
+output_tsv_file_path = "/data/output.tsv" # optional if sqlite_db_path is set - see config.example.toml or Configuration in README.md more context
+#sqlite_db_path = "/data/playback_reporting.db"
+
+[instance_old]
+base_url = "http://localhost:8096"
+api_token = "YOUR_OLD_JELLYFIN_API_TOKEN"
+
+[instance_new]
+base_url = "http://localhost:8097"
+api_token = "YOUR_NEW_JELLYFIN_API_TOKEN"
+```
+
+#### Run the Docker container
+
+```bash
+docker run --rm -v /path/to/your/data:/data ghcr.io/wolffshots/jellyfin-pr-migration:latest
+```
+
+The container will:
+1. Mount your host directory to `/data` inside the container
+2. Use the `config.toml` from this directory
+3. Process your input files and create output files in the same directory
+4. Exit when processing is complete
+
+This allows you to run the migration tool without installing any dependencies on your host system.
+
 ## TODO
 
 *   [ ] **Automatic HTTP to HTTPS Upgrade**: Implement logic to attempt connection via HTTPS if an HTTP connection to a Jellyfin instance fails or is redirected.
 *   [ ] **More Robust Error Handling**: Enhance error handling for API interactions and file operations.
 *   [ ] **Testing**: Add unit and integration tests.
 *   [ ] **Logging Levels**: Implement configurable logging levels (e.g., debug, info, error).
-*   [ ] **Docker Support**: Add support for running the migration tool within a Docker container.
+*   [x] **Docker Support**: Add support for running the migration tool within a Docker container.
